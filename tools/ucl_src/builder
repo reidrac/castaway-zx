@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -e
+
+WORK=build
+UCL_ORIG=ucl_1.03+repack.orig.tar.bz2
+UCL_DIR=ucl-1.03+repack
+
+echo "Building dependencies..."
+
+rm -rf $WORK
+mkdir -p $WORK
+
+tar -C $WORK -xvjf $UCL_ORIG
+
+for patch in patches/*.patch; do
+    patch -d $WORK/$UCL_DIR -p1 < $patch
+done
+
+pushd .
+cd $WORK/$UCL_DIR && ./configure && make
+cp src/.libs/libucl.* ../
+popd
+
+echo "Building ucl tool...."
+gcc -s -O3 -I $WORK/$UCL_DIR/include -L $WORK ucl.c -o ucl -lucl
+mv ucl ../
+
+rm -rf $WORK
+
+echo "All done"
+

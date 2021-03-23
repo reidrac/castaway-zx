@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -e
+
+if [ $# -ne 2 ]; then
+	echo "$0 max_mem filename.bin"
+	exit 1
+fi
+
+CURRENT=`stat -c %s $2`
+LEFT=$(($1 - $CURRENT))
+
+cat <<ENDL
+***
+    Max: $1 bytes
+Current: $CURRENT bytes ($2)
+   Left: $LEFT bytes
+***
+ENDL
+
+exit 0
+
