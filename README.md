@@ -15,6 +15,11 @@ You will need:
 - Z88DK v1.9 (other versions may or may not work)
 - sp1.lib from Z88DK
 
+If you want to build this code with a more recent version of Z88DK, please
+check [z88dk-nightly branch](https://github.com/reidrac/castaway-zx/tree/z88dk-nightly).
+It has been tested on MacOS only, but it may be easier than getting Z88DK v1.9
+to compile (I'm told, I didn't have any issue in Debian).
+
 Then cross your fingers and run `make`.
 
 It should end with:
