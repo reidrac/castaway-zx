@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 png2c.py
 Copyright (C) 2014-2016 by Juan J. Martinez - usebox.net
@@ -243,7 +243,7 @@ def main():
     if args.ucl:
         p = subprocess.Popen(["ucl",], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         output, err = p.communicate(bytearray(out))
-        out = [ord(b) for b in output]
+        out = [ord(chr(b)) for b in output]
 
     data_out = ""
     for part in range(0, len(out), 8):

@@ -29,15 +29,15 @@ basloader.tap: loader.bas
 	bas2tap -q -a -s$(TAP_NAME) $< $@
 
 loader.tap: loader.asm basloader.tap loading_screen.tap main.tap
-	echo "DEFC LOADING_SIZE = $(shell stat -c "%s" loading_ucl.bin)" > loader.opt
-	echo "DEFC APP_SIZE = $(shell stat -c "%s" main.bin)" >> loader.opt
+	echo "DEFC LOADING_SIZE = $(shell stat -f "%z" loading_ucl.bin)" > loader.opt
+	echo "DEFC APP_SIZE = $(shell stat -f "%z" main.bin)" >> loader.opt
 	echo "DEFC LOAD_ADDR = $(LOAD_ADDR)" >> loader.opt
-	z80asm -b -ns -Mbin -ilib/ucl -oloader.bin $<
+	z80asm -b -oloader.bin $< lib/ucl.asm 
 	bin2tap -a 64856 -o loading.tap loader.bin
 	cat basloader.tap loading.tap loading_screen.tap > $@
 
 main.bin: main.c int.h misc.h lib/ucl.h sprites.h beeper.h numbers.h font.h $(GENERATED)
-	zcc $(CFLAGS) $< -o u$@ -lsp1 -lmalloc -llib/ucl -zorg=$(LOAD_ADDR)
+	zcc $(CFLAGS) $< -o u$@ -lsp1 -llib/ucl -zorg=$(LOAD_ADDR) -pragma-include:zpragma.inc -unsigned
 	ucl < umain.bin > main.bin
 
 loading_screen.tap: loading.png
@@ -104,22 +104,22 @@ sentinel2.h: sentinel2.png
 	png2sprite.py -i sentinel2 sentinel2.png > sentinel2.h
 
 prdr.h: prdr.asm
-	z80asm -b -ns -Mbin -oprdr.bin $<
+	z80asm -b -oprdr.bin $<
 	ucl < prdr.bin > prdr_ucl.bin
 	bin2h.py prdr_ucl.bin prdr > prdr.h
 
 song1.h: song1.asm
-	z80asm -b -ns -Mbin -osong1.bin $<
+	z80asm -b  -osong1.bin $<
 	ucl < song1.bin > song1_ucl.bin
 	bin2h.py song1_ucl.bin song1 > song1.h
 
 song2.h: song2.asm
-	z80asm -b -ns -Mbin -osong2.bin $<
+	z80asm -b   -osong2.bin $<
 	ucl < song2.bin > song2_ucl.bin
 	bin2h.py song2_ucl.bin song2 > song2.h
 
 song3.h: song3.asm
-	z80asm -b -ns -Mbin -osong3.bin $<
+	z80asm -b  -osong3.bin $<
 	ucl < song3.bin > song3_ucl.bin
 	bin2h.py song3_ucl.bin song3 > song3.h
 

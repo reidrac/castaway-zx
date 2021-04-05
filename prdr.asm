@@ -43,7 +43,7 @@
 	xor a
 	in a,($fe)
 	cpl
-	and #31
+	and $31
 	jp nz,stopPlayer
 
 	ld c,(hl)

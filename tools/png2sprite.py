@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 png2sprite.py
 Copyright (C) 2014 by Juan J. Martinez - usebox.net
@@ -74,7 +74,7 @@ def main():
 
     tiles = []
     # this is wrong, but assuming nxn sprites works
-    for j in range(h / 8):
+    for j in range(int(h / 8)):
         if not args.nomask:
             tiles.extend([255, 0, 255, 0, 255, 0, 255, 0])
 

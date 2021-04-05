@@ -6,7 +6,7 @@ export ZCCCFG:=$(abspath ../../z88dk/lib/config)/
 
 ucl.lib: ucl.asm
 	echo ucl > ucl.lst
-	z80asm -d -ns -nm -Mo -xucl @ucl.lst
+	z80asm -d -xucl @ucl.lst
 	rm ucl.lst
 
 clean:

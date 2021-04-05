@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 __version__ = "1.0"
 
@@ -310,7 +310,7 @@ def main():
         for block in out:
             p = subprocess.Popen(["ucl",], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
             output, err = p.communicate(bytearray(block))
-            compressed.append([ord(b) for b in output])
+            compressed.append([ord(chr(b)) for b in output])
         out = compressed
 
     print("/* imported from %s */" % args.map_json)

@@ -66,7 +66,7 @@ pad_numbers(uchar *s, uint limit, uint number)
 }
 
 void __CALLEE__
-setup_tiles(uchar *src, uchar base, uchar len)
+setup_tiles(uchar *src, uchar base, uchar len) __naked
 {
 	/*
 	for (i = 0; i < len; ++i, src += 8)
@@ -100,11 +100,12 @@ setup_tiles(uchar *src, uchar base, uchar len)
 	inc c
 
 	djnz setup_tiles_loop
+	ret
 #endasm
 }
 
 void __CALLEE__
-print(uchar x, uchar y, uchar attr, char *str)
+print(uchar x, uchar y, uchar attr, char *str) __naked
 {
 	/*
 	while(*str)
@@ -155,6 +156,7 @@ print(uchar x, uchar y, uchar attr, char *str)
 	pop af
 	pop af
 	push hl
+	ret
 #endasm
 }
 

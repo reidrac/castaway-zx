@@ -25,12 +25,12 @@
 #include "lib/ucl.h"
 
 // setup
-#pragma output STACKPTR=0xd000
 
 // that's 50Hz/3 -> ~16 FPS
 #define WFRAMES 3
 
 // generated includes that are OK with contended memory
+#pragma constseg CONTENDED
 #include "dr_text.h"
 #include "prdr.h"
 #include "song1.h"
@@ -44,6 +44,8 @@
 #include "numbersx2.h"
 #include "numbers.h"
 #include "font.h"
+#pragma constseg rodata_compiler
+
 
 // convenient global variables (for speed)
 int i, j, k;
@@ -126,7 +128,7 @@ const struct sp1_Rect gr = { 0, 0, 32, 20 };
 
 // keys
 uint keys[5] = { 'o', 'p', 'q', ' ', 'h' };
-int (*joyfunc)();
+int (*joyfunc)() __z88dk_fastcall;
 struct in_UDK joy_k;
 
 // FIXME: set an initial hiscore!
@@ -144,7 +146,7 @@ const struct sp1_Rect rdk = { 8, 2, 30, 12 };
     void
 run_redefine_keys()
 {
-    sp1_ClearRectInv(&rdk, INK_BLACK | PAPER_BLACK, 32, SP1_RFLAG_TILE | SP1_RFLAG_COLOUR);
+    sp1_ClearRectInv((struct sp1_Rect *)&rdk, INK_BLACK | PAPER_BLACK, 32, SP1_RFLAG_TILE | SP1_RFLAG_COLOUR);
 
     print(10, 9, INK_WHITE|BRIGHT, "REDEFINE KEYS");
     print(9, 13, INK_WHITE|BRIGHT, "PRESS KEY\x3a");
@@ -180,7 +182,7 @@ run_intro()
 const struct sp1_Rect drr = { 0, 0, 32, 6 };
 
     uint __CALLEE__
-show_message(uchar *text, uchar x, uchar y, uchar c)
+show_message(uchar *text, uchar x, uchar y, uchar c) __naked
 {
 #asm
     pop hl
@@ -226,7 +228,7 @@ show_message(uchar *text, uchar x, uchar y, uchar c)
         cp 33
         jr c, show_message_not_visible
 
-        call in_InKey
+        call in_Inkey
         ld a, h
         or l
         jr nz, show_message_not_visible
@@ -246,6 +248,7 @@ show_message(uchar *text, uchar x, uchar y, uchar c)
         jp show_message_next_char
 
         .show_message_end
+	ret
 #endasm
 }
 
@@ -609,7 +612,7 @@ put_tile(uchar index, uchar x, uchar y)
 }
 
     void __CALLEE__
-put_shadow(uchar x, uchar y)
+put_shadow(uchar x, uchar y) __naked
 {
     /*
        struct sp1_update *shadow_sp;
@@ -627,11 +630,12 @@ put_shadow(uchar x, uchar y)
         inc hl
         ld a, 6
         ld (hl), a
+	ret
 #endasm
 }
 
     uchar __CALLEE__
-map_xy(uchar x, uchar y)
+map_xy(uchar x, uchar y) __naked
 {
     /*
     // optimized for ROOM_WIDTH 16
@@ -679,11 +683,12 @@ map_xy(uchar x, uchar y)
 
         ld h, 0
         ld l, a
+	ret
 #endasm
 }
 
     void __CALLEE__
-set_map_xy(uchar x, uchar y, uchar tile)
+set_map_xy(uchar x, uchar y, uchar tile) __naked
 {
     /*
     // optimized for ROOM_WIDTH 16
@@ -741,6 +746,7 @@ set_map_xy(uchar x, uchar y, uchar tile)
 
         or c
         ld (hl), a
+	ret
 #endasm
 }
 
@@ -876,7 +882,7 @@ sprite_wrapper_16NR()
 }
 
     void __CALLEE__
-add_pickup(uchar *def)
+add_pickup(uchar *def) __naked
 {
     /*
        if (!add_sprite())
@@ -973,12 +979,12 @@ add_pickup(uchar *def)
         ld (hl), e
         inc hl
         ld (hl), d
-
+	ret
 #endasm
 }
 
     void __CALLEE__
-add_zwall(uchar *def)
+add_zwall(uchar *def) __naked
 {
     /*
        if (!add_sprite())
@@ -1113,7 +1119,7 @@ add_zwall(uchar *def)
         inc hl
         ld (hl), c
         ex de, hl
-
+	ret
 #endasm
 }
 
@@ -1220,7 +1226,7 @@ add_explo(int x, int y)
 }
 
     uchar __FASTCALL__
-is_door_tile(uint t)
+is_door_tile(uint t) __naked
 {
 #asm
     ld a, 4
@@ -1231,6 +1237,7 @@ is_door_tile(uint t)
         jr z, is_door_tile0
         ld hl, 0
         .is_door_tile0
+	ret
 #endasm
 }
 
@@ -1258,8 +1265,8 @@ add_door(uchar *def)
     }
 }
 
-    void __FASTCALL__
-door_effect()
+    void __FASTCALL__ 
+door_effect() __naked
 {
 #asm
     ld b, 16
@@ -1305,6 +1312,7 @@ door_effect()
         jr nz, door_effect_loop
 
         djnz door_effect_rep
+	ret
 #endasm
 }
 
@@ -1418,7 +1426,7 @@ setup_map(uchar m)
 uchar gcol;
 
     uchar __CALLEE__
-check_collision_point(struct ssprites *a, uchar x, uchar y)
+check_collision_point(struct ssprites *a, uchar x, uchar y) __naked
 {
     /*
        gcol = (y < a->y + (HEIGHT(a->s->height) << 3) && a->y <= y
@@ -1481,6 +1489,7 @@ check_collision_point(struct ssprites *a, uchar x, uchar y)
 
         .check_collision_point_nay
         ld hl, 0
+	ret
 #endasm
 }
 
@@ -1503,7 +1512,7 @@ check_player_collision(struct ssprites *p)
 }
 
     uchar __CALLEE__
-is_map_blocked(uchar x, uchar y)
+is_map_blocked(uchar x, uchar y) __naked
 {
     /*
     // uses sp_iter2!!!
@@ -1695,7 +1704,7 @@ draw_entities()
 uchar gh, gw;
 
     void __FASTCALL__
-update_efx(const struct ssprites *s)
+update_efx(const struct ssprites *s) __naked
 {
 #asm
     ex de, hl
@@ -1740,11 +1749,12 @@ update_efx(const struct ssprites *s)
         ld (hl), d
 
         .update_efx_done
+	ret
 #endasm
 }
 
     void __FASTCALL__
-update_wzap(const struct ssprites *s)
+update_wzap(const struct ssprites *s) __naked
 {
 #asm
     ex de, hl
@@ -1808,6 +1818,7 @@ update_wzap(const struct ssprites *s)
         pop af
 
         .update_wzap_done
+	ret
 #endasm
 }
 

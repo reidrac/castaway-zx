@@ -1,7 +1,7 @@
 	; this forces a 512 bytes limit for the loader!
 	ORG 64856
 
-LIB ucl_uncompress
+EXTERN ucl_uncompress
 
 INCLUDE "loader.opt"
 

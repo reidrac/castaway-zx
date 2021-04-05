@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 png2scr.py
 Copyright (C) 2014-2016 by Juan J. Martinez - usebox.net
