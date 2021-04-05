@@ -8,6 +8,11 @@ because the code quality isn't great (my excuse is that I was learning, what is
 yours?), and some of the dependencies may require a bit too much effort to
 compile the game.
 
+This has been adapted to a more current version of Z88DK by [suborb](https://github.com/suborb),
+and I can't support it!
+
+Check [main branch](https://github.com/reidrac/castaway-zx) for the original release.
+
 You will need:
 
 - A POSIX environment (tested on Macos)
