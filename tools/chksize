@@ -7,7 +7,7 @@ if [ $# -ne 2 ]; then
 	exit 1
 fi
 
-CURRENT=`stat -c %s $2`
+CURRENT=`stat -f %z $2`
 LEFT=$(($1 - $CURRENT))
 
 cat <<ENDL

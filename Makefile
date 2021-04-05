@@ -17,7 +17,7 @@ all:
 	make -C tools
 	make -C lib
 	make $(TAP_NAME).tap
-	chksize $(MAX_MEM) umain.bin
+	tools/chksize $(MAX_MEM) umain.bin
 
 $(TAP_NAME).tap: loader.tap main.tap
 	cat loader.tap main.tap > $@
@@ -37,7 +37,7 @@ loader.tap: loader.asm basloader.tap loading_screen.tap main.tap
 	cat basloader.tap loading.tap loading_screen.tap > $@
 
 main.bin: main.c int.h misc.h lib/ucl.h sprites.h beeper.h numbers.h font.h $(GENERATED)
-	zcc $(CFLAGS) $< -o u$@ -lsp1 -llib/ucl -zorg=$(LOAD_ADDR) -pragma-include:zpragma.inc -unsigned
+	zcc $(CFLAGS) $< -o u$@ -lsp1 -llib/ucl -zorg=$(LOAD_ADDR) -pragma-include:zpragma.inc 
 	ucl < umain.bin > main.bin
 
 loading_screen.tap: loading.png

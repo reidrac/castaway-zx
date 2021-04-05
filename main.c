@@ -30,6 +30,7 @@
 #define WFRAMES 3
 
 // generated includes that are OK with contended memory
+// Place all const data into contended memory
 #pragma constseg CONTENDED
 #include "dr_text.h"
 #include "prdr.h"
@@ -44,7 +45,6 @@
 #include "numbersx2.h"
 #include "numbers.h"
 #include "font.h"
-#pragma constseg rodata_compiler
 
 
 // convenient global variables (for speed)
@@ -2911,6 +2911,7 @@ main()
 
     setup_int();
 
+    zx_border(INK_BLACK);
     // sp1.lib
     sp1_Initialize(SP1_IFLAG_MAKE_ROTTBL | SP1_IFLAG_OVERWRITE_TILES | SP1_IFLAG_OVERWRITE_DFILE, INK_BLACK | PAPER_BLACK, ' ');
 

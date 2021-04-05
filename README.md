@@ -10,9 +10,9 @@ compile the game.
 
 You will need:
 
-- A POSIX environment (Linux is perfect)
-- GCC, GNU Make, Python 2
-- Z88DK v1.9 (other versions may or may not work)
+- A POSIX environment (tested on Macos)
+- GCC, GNU Make, Python 3
+- z88dk nightly dated 20210406 or later
 - sp1.lib from Z88DK
 
 Then cross your fingers and run `make`.
@@ -21,8 +21,8 @@ It should end with:
 ```
 ***
     Max: 26936 bytes
-Current: 26875 bytes (umain.bin)
-   Left: 61 bytes
+Current: 26431 bytes (umain.bin)
+   Left: 505 bytes
 ***
 ```
 
