@@ -128,7 +128,7 @@ const struct sp1_Rect gr = { 0, 0, 32, 20 };
 
 // keys
 uint keys[5] = { 'o', 'p', 'q', ' ', 'h' };
-int (*joyfunc)() __z88dk_fastcall;
+uint (*joyfunc)(struct in_UDK *) __z88dk_fastcall;
 struct in_UDK joy_k;
 
 // FIXME: set an initial hiscore!
@@ -146,7 +146,7 @@ const struct sp1_Rect rdk = { 8, 2, 30, 12 };
     void
 run_redefine_keys()
 {
-    sp1_ClearRectInv((struct sp1_Rect *)&rdk, INK_BLACK | PAPER_BLACK, 32, SP1_RFLAG_TILE | SP1_RFLAG_COLOUR);
+    sp1_ClearRectInv(&rdk, INK_BLACK | PAPER_BLACK, 32, SP1_RFLAG_TILE | SP1_RFLAG_COLOUR);
 
     print(10, 9, INK_WHITE|BRIGHT, "REDEFINE KEYS");
     print(9, 13, INK_WHITE|BRIGHT, "PRESS KEY\x3a");
